@@ -1,8 +1,7 @@
-// src/index.js
-import { render } from '@wordpress/element';
-import { ToggleControl, TextControl, SelectControl } from '@wordpress/components';
+import { createRoot,useState, useEffect } from '@wordpress/element';
+import domReady from '@wordpress/dom-ready';
+import { __experimentalHeading as Heading, Panel, PanelBody, PanelRow, ToggleControl, TextControl, SelectControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-import { useState, useEffect } from '@wordpress/element';
 
 function SettingsApp() {
     const [settings, setSettings] = useState(null);
@@ -31,79 +30,100 @@ function SettingsApp() {
     if (!settings) return <div>Loading...</div>;
 
     return (
-        <div className="wrap">
-            <h1>Block Editor Settings</h1>
-            <div className="block-editor-settings">
-                <ToggleControl
-                    label="Disable Pattern Directory"
-                    checked={settings.disable_patterns}
-                    onChange={(value) => updateSettings({ ...settings, disable_patterns: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Template Editor"
-                    checked={settings.disable_template_editor}
-                    onChange={(value) => updateSettings({ ...settings, disable_template_editor: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Code Editor"
-                    checked={settings.disable_code_editor}
-                    onChange={(value) => updateSettings({ ...settings, disable_code_editor: value })}
-                />
-                
-                <TextControl
-                    label="Max Upload File Size (bytes)"
-                    type="number"
-                    value={settings.max_upload_size}
-                    onChange={(value) => updateSettings({ ...settings, max_upload_size: parseInt(value) })}
-                />
-                
-                <SelectControl
-                    label="Default Image Size"
-                    value={settings.default_image_size}
-                    options={[
-                        { label: 'Thumbnail', value: 'thumbnail' },
-                        { label: 'Medium', value: 'medium' },
-                        { label: 'Large', value: 'large' },
-                        { label: 'Full Size', value: 'full' }
-                    ]}
-                    onChange={(value) => updateSettings({ ...settings, default_image_size: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Openverse"
-                    checked={settings.disable_openverse}
-                    onChange={(value) => updateSettings({ ...settings, disable_openverse: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Font Library"
-                    checked={settings.disable_font_library}
-                    onChange={(value) => updateSettings({ ...settings, disable_font_library: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Inspector Tabs"
-                    checked={settings.disable_inspector_tabs}
-                    onChange={(value) => updateSettings({ ...settings, disable_inspector_tabs: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Block Directory"
-                    checked={settings.disable_block_directory}
-                    onChange={(value) => updateSettings({ ...settings, disable_block_directory: value })}
-                />
-                
-                <ToggleControl
-                    label="Disable Remote Patterns"
-                    checked={settings.disable_remote_patterns}
-                    onChange={(value) => updateSettings({ ...settings, disable_remote_patterns: value })}
-                />
-            </div>
-            {isSaving && <div>Saving...</div>}
-        </div>
+        <>
+            <Heading level={1}>
+                Block Editor Settings
+            </Heading>
+            <Panel>
+                <PanelBody>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Pattern Directory"
+                            checked={settings.disable_patterns}
+                            onChange={(value) => updateSettings({ ...settings, disable_patterns: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Template Editor"
+                            checked={settings.disable_template_editor}
+                            onChange={(value) => updateSettings({ ...settings, disable_template_editor: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Code Editor"
+                            checked={settings.disable_code_editor}
+                            onChange={(value) => updateSettings({ ...settings, disable_code_editor: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <TextControl
+                            label="Max Upload File Size (bytes)"
+                            type="number"
+                            value={settings.max_upload_size}
+                            onChange={(value) => updateSettings({ ...settings, max_upload_size: parseInt(value) })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <SelectControl
+                            label="Default Image Size"
+                            value={settings.default_image_size}
+                            options={[
+                                { label: 'Thumbnail', value: 'thumbnail' },
+                                { label: 'Medium', value: 'medium' },
+                                { label: 'Large', value: 'large' },
+                                { label: 'Full Size', value: 'full' }
+                            ]}
+                            onChange={(value) => updateSettings({ ...settings, default_image_size: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Openverse"
+                            checked={settings.disable_openverse}
+                            onChange={(value) => updateSettings({ ...settings, disable_openverse: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Font Library"
+                            checked={settings.disable_font_library}
+                            onChange={(value) => updateSettings({ ...settings, disable_font_library: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Inspector Tabs"
+                            checked={settings.disable_inspector_tabs}
+                            onChange={(value) => updateSettings({ ...settings, disable_inspector_tabs: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Block Directory"
+                            checked={settings.disable_block_directory}
+                            onChange={(value) => updateSettings({ ...settings, disable_block_directory: value })}
+                        />
+                    </PanelRow>
+                    <PanelRow>
+                        <ToggleControl
+                            label="Disable Remote Patterns"
+                            checked={settings.disable_remote_patterns}
+                            onChange={(value) => updateSettings({ ...settings, disable_remote_patterns: value })}
+                        />
+                    </PanelRow>
+                </PanelBody>
+                {isSaving && <div>Saving...</div>}
+            </Panel>
+        </>
     );
 }
 
-render(<SettingsApp />, document.getElementById('block-editor-settings-app'));
+domReady( () => {
+    const root = createRoot(
+        document.getElementById( 'block-editor-settings-app' )
+    );
+
+    root.render( <SettingsApp /> );
+} );
